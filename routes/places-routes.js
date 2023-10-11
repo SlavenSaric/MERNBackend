@@ -21,14 +21,24 @@ router.get("/:pid", (req, res, next) => {
   const placeId = req.params.pid;
   const place = DUMMY_PLACES.find((p) => p.id === placeId);
 
-  res.json({place});
+  if (!place) {
+    const error = new Error("Could not find a place for the provided ID.");
+    error.code = 404;
+    throw error;
+  }
 });
 
-router.get('/user/:uid', (req,res, next) => {
-    const userId = req.params.uid
-    const user = DUMMY_PLACES.find(u => u.creator === userId)
+router.get("/user/:uid", (req, res, next) => {
+  const userId = req.params.uid;
+  const place = DUMMY_PLACES.find((u) => u.creator === userId);
 
-    res.json({user})
-})
+  if (!place) {
+    const error = new Error("Could not find a user for the provided ID.");
+    error.code = 404;
+    return next(error);
+  }
+
+  res.json({ place });
+});
 
 module.exports = router;
