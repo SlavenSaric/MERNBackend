@@ -19,14 +19,23 @@ let DUMMY_PLACES = [
     },
   ];
 
-const getPlaceById = (req, res, next) => {
+const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
-  const place = DUMMY_PLACES.find((p) => p.id === placeId);
+  let place
+  try{
+    place = await Place.findById(placeId)
+  }catch(err){
+    const error = new HttpError('Something went wrong. Could not find a place.', 500)
+    return next(error)
+  }
+
 
   if (!place) {
-    throw new HttpError("Could not find a place for the provided ID.", 404);
+    const error =  new HttpError("Could not find a place for the provided ID.", 404);
+    return next(error)
   }
-  res.json({ place });
+
+  res.json({ place: place.toObject({getters: true}) });
 };
 
 const getPlacesByUserId = (req, res, next) => {
@@ -58,7 +67,7 @@ const createPlace = async (req,res, next) => {
       address,
       location: coords,
       image: 'https://www.esbnyc.com/sites/default/files/styles/260x370/public/2020-01/thumbnail5M2VW4ZF.jpg?itok=3kRhMPZA',
-      creator,
+      creator
     })
     
     try{
