@@ -7,8 +7,17 @@ const DUMMY_USERS = [
   { id: "u1", name: "Max Schwart", email: "max@test.com", password: "testers" },
 ];
 
-const getUsers = (req, res, next) => {
-  res.json({ users: DUMMY_USERS });
+const getUsers = async (req, res, next) => {
+  
+  let users
+  try{
+    users = await User.find({}, '-password')
+  }catch(err){
+    const error = new HttpError('Fetching users failed', 500)
+    return next(error)
+  }
+
+  res.json({users: users.map(u => u.toObject({getteres: true}))})
 };
 
 const signup = async (req, res, next) => {
