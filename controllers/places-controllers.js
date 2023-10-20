@@ -4,7 +4,9 @@ const getCoordsForAddress = require('../util/location')
 
 const HttpError = require("../models/http-error");
 const Place = require('../models/place');
+const User = require('../models/user')
 const { log } = require('console');
+const  mongoose = require('mongoose');
 
 let DUMMY_PLACES = [
     {
@@ -77,9 +79,28 @@ const createPlace = async (req,res, next) => {
       image: 'https://www.esbnyc.com/sites/default/files/styles/260x370/public/2020-01/thumbnail5M2VW4ZF.jpg?itok=3kRhMPZA',
       creator
     })
+
+    let user
+    try{
+      user = await User.findById(creator)
+    }catch(err){
+      const error = new HttpError('Creating place failed, please try again', 500)
+      return next(error)
+    }
+
+    if(!user){
+      const error = new HttpError('Could not find user for provided ID', 500)
+      return next(error)
+    }
+    console.log(user);
     
     try{
-      await createdPlace.save()
+      const sess = await mongoose.startSession()
+      sess.startTransaction()
+      await createdPlace.save({session: sess})
+      user.places.push(createdPlace)
+      await user.save({session: sess})
+      await sess.commitTransaction()
     }catch(err){
       const error = new HttpError('Creating place failed. Please try again', 500)
       return next(error)
