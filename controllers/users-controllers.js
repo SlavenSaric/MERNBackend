@@ -1,23 +1,17 @@
-const uuid = require("uuid");
 const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
-const DUMMY_USERS = [
-  { id: "u1", name: "Max Schwart", email: "max@test.com", password: "testers" },
-];
-
 const getUsers = async (req, res, next) => {
-  
-  let users
-  try{
-    users = await User.find({}, '-password')
-  }catch(err){
-    const error = new HttpError('Fetching users failed', 500)
-    return next(error)
+  let users;
+  try {
+    users = await User.find({}, "-password");
+  } catch (err) {
+    const error = new HttpError("Fetching users failed", 500);
+    return next(error);
   }
 
-  res.json({users: users.map(u => u.toObject({getteres: true}))})
+  res.json({ users: users.map((u) => u.toObject({ getteres: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -80,9 +74,12 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  if(!existingUser || existingUser.password !== password){
-    const error = new HttpError('Invalid credentials, could not log you in', 401)
-    return next(error)
+  if (!existingUser || existingUser.password !== password) {
+    const error = new HttpError(
+      "Invalid credentials, could not log you in",
+      401
+    );
+    return next(error);
   }
 
   res.json({ message: "Logged in!" });
