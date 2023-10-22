@@ -72,8 +72,7 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: coords,
-    image:
-      "https://www.esbnyc.com/sites/default/files/styles/260x370/public/2020-01/thumbnail5M2VW4ZF.jpg?itok=3kRhMPZA",
+    image: req.file.path,
     creator,
   });
 
