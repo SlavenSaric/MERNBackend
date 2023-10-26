@@ -118,7 +118,7 @@ const login = async (req, res, next) => {
 
   let token
   try{
-    token = jwt.sign({userId: existingUser.userId, email: existingUser.email}, 'supersecret_dont_share', {expiresIn: '1h'})
+    token = jwt.sign({userId: existingUser.id, email: existingUser.email}, 'supersecret_dont_share', {expiresIn: '1h'})
   }catch(err){
     const error = new HttpError("Logging in failed. Please try again", 500);
     return next(error);
