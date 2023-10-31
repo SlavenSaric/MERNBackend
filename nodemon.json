@@ -1,0 +1,8 @@
+{
+    "env": {
+        "DB_USER": "slaven",
+        "DB_PASSWORD": "g1zseqlGPm16ELP6",
+        "DB_NAME": "mern",
+        "JWT_KEY": "supersecret_dont_share"
+    }
+}
