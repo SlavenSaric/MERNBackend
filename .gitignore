@@ -1,3 +1,4 @@
 #dependcies
 /node_modules
 /uploads/images/
+nodemon.json
