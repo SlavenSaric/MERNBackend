@@ -42,7 +42,7 @@ app.use((error ,req, res, next) => {
 });
 
 mongoose
-.connect('mongodb+srv://slaven:g1zseqlGPm16ELP6@clustermdb.naaddkt.mongodb.net/mern?retryWrites=true&w=majority')
+.connect(`mongodb+srv://slaven:g1zseqlGPm16ELP6@clustermdb.naaddkt.mongodb.net/mern?retryWrites=true&w=majority`)
 .then(() => {
     app.listen(5000);
 }).
